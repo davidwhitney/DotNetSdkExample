@@ -44,7 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutoResource.cs" />
     <Compile Include="Http\SystemNetHttp\SystemNetTransport.cs" />
     <Compile Include="Http\IHttpTransport.cs" />
     <Compile Include="Http\InterceptingHttpTransport.cs" />

@@ -7,7 +7,8 @@ namespace DotNetSdk.Http.SystemNetHttp
     {
         public HttpResponseMessage MakeRequest(HttpRequestMessage request)
         {
-            throw new NotImplementedException();
+            var client = new HttpClient();
+            return client.SendAsync(request).Result;
         }
     }
 }

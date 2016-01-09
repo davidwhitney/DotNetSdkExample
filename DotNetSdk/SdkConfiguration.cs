@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using DotNetSdk.Http;
 using DotNetSdk.Http.SystemNetHttp;
@@ -15,13 +16,23 @@ namespace DotNetSdk
 
         public IHttpTransport Transport { get; set; }
         public ISerializeMessages Serializer { get; set; }
-        public IList<IInterceptRequests> Interceptors { get; set; }
+        public IList<Type> Interceptors { get; set; }
 
         public SdkConfiguration()
         {
             BaseUrl = "http://some-site.com/";
+            Interceptors = new List<Type>
+            {
+                typeof (MethodTimingInterceptor)
+            };
             Transport = new InterceptingHttpTransport(new SystemNetTransport(), this);
             Serializer = new JsonDotNetSerializer();
+        }
+
+        public SdkConfiguration WithInterceptor<T>()
+        {
+            Interceptors.Add(typeof(T));
+            return this;
         }
     }
 }

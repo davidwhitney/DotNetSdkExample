@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
+using DotNetSdk.Interception;
 
 namespace DotNetSdk.Http
 {
@@ -16,14 +18,16 @@ namespace DotNetSdk.Http
 
         public HttpResponseMessage MakeRequest(HttpRequestMessage request)
         {
-            foreach (var interceptor in _configuration.Interceptors)
+            var interceptors = _configuration.Interceptors.Select(Activator.CreateInstance).Cast<IInterceptRequests>().ToList();
+            foreach (var interceptor in interceptors)
             {
                 interceptor.BeforeHttpRequest(request);
             }
 
             var response = _actual.MakeRequest(request);
 
-            foreach (var interceptor in _configuration.Interceptors)
+            interceptors.Reverse();
+            foreach (var interceptor in interceptors)
             {
                 interceptor.AfterHttpRequest(request, response);
             }
